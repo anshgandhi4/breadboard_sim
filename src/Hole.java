@@ -7,9 +7,13 @@ public class Hole extends Rectangle {
     public int r,c;
 
     public Hole(int x, int y, int r, int c) {
-        setX(x); setY(y); setWidth(size); setHeight(size);
+        setX(x);
+        setY(y);
+        setWidth(size);
+        setHeight(size);
         setFill(Color.WHITE);
         setStroke(Color.GRAY);
-        this.r = r; this.c = c;
+        this.r = r;
+        this.c = c;
     }
 }

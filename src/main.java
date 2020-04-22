@@ -15,7 +15,7 @@ public class main extends Application {
         mainPane.setCenter(simPane);
 
         Scene scene = new Scene(mainPane, 1200, 650);
-        primaryStage.setTitle("Breadboard Sim");
+        primaryStage.setTitle("Breadboard Simulator");
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(new Image("icon.png"));
         primaryStage.show();
