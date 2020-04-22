@@ -1,3 +1,5 @@
+package Java;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -17,7 +19,7 @@ public class main extends Application {
         Scene scene = new Scene(mainPane, 1200, 650);
         primaryStage.setTitle("Breadboard Simulator");
         primaryStage.setScene(scene);
-        primaryStage.getIcons().add(new Image("icon.png"));
+        primaryStage.getIcons().add(new Image("Java/icon.png"));
         primaryStage.show();
     }
 }
