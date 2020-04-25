@@ -34,16 +34,16 @@ class Breadboard:
             self.groups[buses] = Group()
             for column in range(1, self.length - 1):
                 self.groups[buses].add(self.elements[(buses, column)])
-                self.elements[(buses, column)].set_group(self.groups[buses])
+                self.elements[(buses, column)].group = self.groups[buses]
         for terminals in range(1, self.length):
             self.groups[terminals * 6] = Group()
             self.groups[terminals * 6 - 3] = Group()
             for row in range(4, 9):
                 self.groups[terminals * 6].add(self.elements[(row, terminals)])
-                self.elements[(row, terminals)].set_group(self.groups[terminals * 6])
+                self.elements[(row, terminals)].group = self.groups[terminals * 6]
             for row in range(10, 15):
                 self.groups[terminals * 6 - 3].add(self.elements[(row, terminals)])
-                self.elements[(row, terminals)].set_group(self.groups[terminals * 6 - 3])
+                self.elements[(row, terminals)].group = self.groups[terminals * 6 - 3]
 
         # Reset Simulator
         self.master.reset()
