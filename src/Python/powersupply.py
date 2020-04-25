@@ -57,7 +57,7 @@ class PowerSupply(Frame):
 
 class PowerSupplyEdit(Frame):
     def __init__(self, master, hole, sim):
-        """ PowerSupply(master): creates a new PowerSupply object
+        """ PowerSupplyEdit(master): creates a new PowerSupplyEdit object
         :param master: (Tk)
         :param hole: (Hole)
         :param sim: (Simulator) """
