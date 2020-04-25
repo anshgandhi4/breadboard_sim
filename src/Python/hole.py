@@ -1,17 +1,18 @@
 from tkinter import *
 
-class Hole(Label):
+class Hole(Canvas):
     def __init__(self, master, coord):
         """ Hole(master, coord): creates a new Hole object with given coordinates
         Hole object comes with click listener enabled
         :param master: (Class), Breadboard class (in this case)
         :param coord: (Tuple), coordinates given by Breadboard class """
 
-        Label.__init__(self, master, height = 1, width = 2, text = "", bg = "khaki1", relief = "sunken", font = ("Arial", 12))
+        Canvas.__init__(self, master, height = 20, width = 20, bg = "khaki1", highlightthickness = 0, relief = "sunken", bd = 2)
         self.coord = coord
         self.bind("<Button>", self.click)
         self.group = None
         self.color = "khaki1"
+        self.text = self.create_text(11, 11, text = "", font = ("Arial", 12))
 
         self.root = None
         self.powersupply = None
@@ -23,11 +24,11 @@ class Hole(Label):
 
         self["relief"] = "flat"
         self.unbind("<Button>")
-        self["text"] = label
+        self.itemconfig(self.text, text = label)
         if label == "+":
-            self["fg"] = "red"
+            self.itemconfig(self.text, fill = "red")
         elif label == "-":
-            self["fg"] = "blue"
+            self.itemconfig(self.text, fill = "blue")
 
     def click(self, event):
         """ Hole.click(): updates Breadboard.display text with current coordinates

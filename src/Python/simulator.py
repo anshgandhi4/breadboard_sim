@@ -8,7 +8,7 @@ from Python.resistor import Resistor
 from Python.led import LED
 from Python.powersupply import PowerSupply
 from Python.powersupply import PowerSupplyEdit
-from Python.button import Button
+from Python.switch import Switch
 
 class Simulator(Frame):
     def __init__(self, master):
@@ -59,13 +59,13 @@ class Simulator(Frame):
         self.powersupplypic.bind("<Button>", self.powersupply_select)
         self.powersupply = None
 
-        self.buttons = []
-        self.buttonimg = ImageTk.PhotoImage(Image.open("button.jpg").resize((50, 50), Image.ANTIALIAS))
-        self.buttonpic = Canvas(self, width = 50, height = 50, highlightthickness = 4)
-        self.buttonpic.create_image(27, 27, image = self.buttonimg)
-        self.buttonpic.image = self.buttonimg
-        self.buttonpic.grid(row = self.height, column = 41, columnspan = 9)
-        self.buttonpic.bind("<Button>", self.button_select)
+        self.switchs = []
+        self.switchimg = ImageTk.PhotoImage(Image.open("switch.jpg").resize((50, 50), Image.ANTIALIAS))
+        self.switchpic = Canvas(self, width = 50, height = 50, highlightthickness = 4)
+        self.switchpic.create_image(27, 27, image = self.switchimg)
+        self.switchpic.image = self.switchimg
+        self.switchpic.grid(row = self.height, column = 41, columnspan = 9)
+        self.switchpic.bind("<Button>", self.switch_select)
 
         self.elements = {}
         self.groups = {}
@@ -77,7 +77,7 @@ class Simulator(Frame):
         self.resistorpic["highlightbackground"] = "white"
         self.ledpic["highlightbackground"] = "white"
         self.powersupplypic["highlightbackground"] = "white"
-        self.buttonpic["highlightbackground"] = "white"
+        self.switchpic["highlightbackground"] = "white"
 
     def reset(self):
         self.elements = self.breadboard.elements
@@ -124,9 +124,9 @@ class Simulator(Frame):
         powersupply = PowerSupplyEdit(root, self.elements[coord], self)
         powersupply.mainloop()
 
-    def button_select(self, event):
+    def switch_select(self, event):
         self.reset_highlight()
-        self.buttonpic["highlightbackground"] = "gold"
+        self.switchpic["highlightbackground"] = "gold"
 
 # Run Simulator
 root = Tk()
