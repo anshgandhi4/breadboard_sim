@@ -31,6 +31,7 @@ class Simulator(Frame):
         self.wirepic.image = self.wireimg
         self.wirepic.grid(row = self.height, column = 1, columnspan = 9)
         self.wirepic.bind("<Button>", self.wire_select)
+        self.wire = None
 
         self.resistors = []
         self.resistorimg = ImageTk.PhotoImage(Image.open("resistor.jpg").resize((50, 50), Image.ANTIALIAS))
@@ -94,6 +95,11 @@ class Simulator(Frame):
     def wire_select(self, event):
         self.reset_highlight()
         self.wirepic["highlightbackground"] = "gold"
+
+        root = Tk()
+        root.title("New Wire")
+        self.wire = Wire(root, self)
+        self.wire.mainloop()
 
     def resistor_select(self, event):
         self.reset_highlight()
