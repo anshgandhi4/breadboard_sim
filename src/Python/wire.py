@@ -41,7 +41,7 @@ class Wire(Frame):
     def submit(self):
         labelList = ("", "+t", "-t", "", "a", "b", "c", "d", "e", "", "f", "g", "h", "i", "j", "", "-b", "+b", "")
         color = self.color.get()
-        if color == "":
+        if color in ["", "tomato", "saddle brown", "khaki1", "green2", "red3", "ivory3", "ivory4"]:
             color = "sky blue"
 
         try:
@@ -119,7 +119,7 @@ class WireEdit(Frame):
         except:
             endcoord = self.sim.wirestarts[self.coord].coord
 
-        if color not in ["tomato", "khaki1", "green2", "red3", "ivory3", "ivory4"]:
+        if color not in ["tomato", "saddle brown", "khaki1", "green2", "red3", "ivory3", "ivory4"]:
             self.master.destroy()
             if self.coord[0] == endcoord[0]:
                 for col in range(min(self.coord[1], endcoord[1]), max(self.coord[1], endcoord[1]) + 1):

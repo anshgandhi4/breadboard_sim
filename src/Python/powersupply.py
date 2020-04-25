@@ -36,7 +36,7 @@ class PowerSupply(Frame):
         if self.sim.elements[(1, 1)].color != "khaki1":
             self.topButton["state"] = DISABLED
         if self.sim.elements[(17, 1)].color != "khaki1":
-            self.topButton["state"] = DISABLED
+            self.bottomButton["state"] = DISABLED
 
     def createtop(self):
         self.tb["text"] = "Top"
@@ -47,7 +47,12 @@ class PowerSupply(Frame):
         self.coord = (17, 1)
 
     def submit(self):
-        voltage = self.voltage.get()
+        voltage = 0
+        try:
+            voltage = int(self.voltage.get())
+        except:
+            pass
+
         self.master.destroy()
         self.sim.supplies[self.coord] = self.sim.elements[self.coord]
         self.sim.voltages[self.coord] = voltage
@@ -73,7 +78,7 @@ class PowerSupplyEdit(Frame):
         self.voltageText.grid(row = 0, column = 0)
         self.currentText = Label(self, bg = "white", font = ("Arial", 12))
         self.currentText.grid(row = 1, column = 0)
-        self.currentText["text"] = "Current Value: " + self.sim.voltages[self.coord]
+        self.currentText["text"] = "Current Value: " + str(self.sim.voltages[self.coord])
         self.voltage = Entry(self)
         self.voltage.grid(row = 2, column = 0)
 
@@ -84,7 +89,12 @@ class PowerSupplyEdit(Frame):
         self.delete.grid(row = 4, column = 0)
 
     def update(self):
-        voltage = self.voltage.get()
+        voltage = 0
+        try:
+            voltage = int(self.voltage.get())
+        except:
+            pass
+
         self.master.destroy()
         self.sim.voltages[self.coord] = voltage
 
