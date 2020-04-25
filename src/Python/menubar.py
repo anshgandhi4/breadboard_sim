@@ -21,10 +21,6 @@ class MenuBar:
         filemenu.add_command(label = "Save", command = self.save_file)
         self.menubar.add_cascade(label = "File", menu = filemenu)
 
-        editmenu = Menu(self.menubar, tearoff = 0)
-        editmenu.add_command(label = "Undo", command = self.undo)
-        self.menubar.add_cascade(label = "Edit", menu = editmenu)
-
         helpmenu = Menu(self.menubar, tearoff = 0)
         helpmenu.add_command(label = "About", command = self.about)
         self.menubar.add_cascade(label = "Help", menu = helpmenu)
@@ -47,9 +43,6 @@ class MenuBar:
             breadboardFile = open(filename, "w")
             breadboardFile.write("breadboard")
             breadboardFile.close()
-
-    def undo(self):
-        print("breadboard")
 
     def about(self):
         messagebox.showinfo("Breadboard Simulator", "This simulator was made by Ansh Gandhi and Jonathan Ma.", parent = self.master)

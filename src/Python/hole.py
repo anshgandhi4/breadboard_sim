@@ -42,8 +42,10 @@ class Hole(Canvas):
             self.master.powersupply_edit(self.coord)
         elif self.coord in self.master.wirestarts.keys() or self.coord in self.master.wireends.keys():
             self.master.wire_edit(self.coord)
-        elif self.coord in self.master.resistances.keys():
+        elif self.coord in self.master.resistorstarts.keys() or self.coord in self.master.resistorends.keys():
             self.master.resistor_edit(self.coord)
+        elif self.coord in self.master.ledstarts.keys() or self.coord in self.master.ledends.keys():
+            self.master.led_edit(self.coord)
         else:
             self.master.display["text"] = self.coord
             for element in self.master.elements:

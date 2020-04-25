@@ -132,7 +132,6 @@ class ResistorEdit(Frame):
 
     def delete(self):
         endcoord = None
-
         try:
             endcoord = self.sim.resistorends[self.coord].coord
         except:

@@ -8,6 +8,7 @@ from Python.wire import WireEdit
 from Python.resistor import Resistor
 from Python.resistor import ResistorEdit
 from Python.led import LED
+from Python.led import LEDEdit
 from Python.powersupply import PowerSupply
 from Python.powersupply import PowerSupplyEdit
 from Python.switch import Switch
@@ -45,7 +46,8 @@ class Simulator(Frame):
         self.resistorpic.grid(row = self.height, column = 11, columnspan = 9)
         self.resistorpic.bind("<Button>", self.resistor_select)
 
-        self.leds = []
+        self.ledstarts = {}
+        self.ledends ={}
         self.ledimg = ImageTk.PhotoImage(Image.open("led.jpg").resize((50, 50), Image.ANTIALIAS))
         self.ledpic = Canvas(self, width = 50, height = 50, highlightthickness = 4)
         self.ledpic.create_image(27, 27, image = self.ledimg)
@@ -128,6 +130,17 @@ class Simulator(Frame):
     def led_select(self, event):
         self.reset_highlight()
         self.ledpic["highlightbackground"] = "gold"
+
+        root = Tk()
+        root.title("New LED")
+        led = LED(root, self)
+        led.mainloop()
+
+    def led_edit(self, coord):
+        root = Tk()
+        root.title("Edit LED")
+        led = LEDEdit(root, self.elements[coord], self)
+        led.mainloop()
 
     def powersupply_select(self, event):
         self.reset_highlight()
