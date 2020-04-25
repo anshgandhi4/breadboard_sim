@@ -4,7 +4,7 @@ class Hole(Canvas):
     def __init__(self, master, coord):
         """ Hole(master, coord): creates a new Hole object with given coordinates
         Hole object comes with click listener enabled
-        :param master: (Class), Breadboard class (in this case)
+        :param master: (Simulator)
         :param coord: (Tuple), coordinates given by Breadboard class """
 
         Canvas.__init__(self, master, height = 20, width = 20, bg = "khaki1", highlightthickness = 0, relief = "sunken", bd = 2)
@@ -25,26 +25,28 @@ class Hole(Canvas):
         self["relief"] = "flat"
         self.unbind("<Button>")
         self.itemconfig(self.text, text = label)
-        if label == "+":
+        if label[:-1] == "+":
             self.itemconfig(self.text, fill = "red")
-        elif label == "-":
+        elif label[:-1] == "-":
             self.itemconfig(self.text, fill = "blue")
 
     def click(self, event):
         """ Hole.click(): updates Breadboard.display text with current coordinates
         highlights all Holes accordingly """
 
-        if self["bg"] == "grey":
+        if self["bg"] == "ivory4":
             for element in self.master.elements:
                 if self.master.elements[element]["bg"] != self.master.elements[element].color:
                     self.master.elements[element]["bg"] = self.master.elements[element].color
-        elif self["bg"] == "black":
+        elif self.coord in self.master.supplies.keys():
             self.master.powersupply_edit(self.coord)
+        elif self.coord in self.master.wirestarts.keys() or self.coord in self.master.wireends.keys():
+            self.master.wire_edit(self.coord)
         else:
             self.master.display["text"] = self.coord
             for element in self.master.elements:
                 if self.master.elements[element]["bg"] != self.master.elements[element].color:
                     self.master.elements[element]["bg"] = self.master.elements[element].color
             for element in self.group.holes:
-                element["bg"] = "lightgrey"
-            self["bg"] = "grey"
+                element["bg"] = "ivory3"
+            self["bg"] = "ivory4"

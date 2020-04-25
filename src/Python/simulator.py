@@ -4,6 +4,7 @@ from PIL import ImageTk
 from Python.menubar import MenuBar
 from Python.breadboard import Breadboard
 from Python.wire import Wire
+from Python.wire import WireEdit
 from Python.resistor import Resistor
 from Python.led import LED
 from Python.powersupply import PowerSupply
@@ -24,14 +25,14 @@ class Simulator(Frame):
         self.display = Label(self, bg = "white", font = ("Arial", 48))
         self.display.grid(row = self.height + 1, column = 0, columnspan = self.length)
 
-        self.wires = []
+        self.wirestarts = {}
+        self.wireends ={}
         self.wireimg = ImageTk.PhotoImage(Image.open("wire.jpg").resize((50, 50), Image.ANTIALIAS))
         self.wirepic = Canvas(self, width = 50, height = 50, highlightthickness = 4)
         self.wirepic.create_image(27, 27, image = self.wireimg)
         self.wirepic.image = self.wireimg
         self.wirepic.grid(row = self.height, column = 1, columnspan = 9)
         self.wirepic.bind("<Button>", self.wire_select)
-        self.wire = None
 
         self.resistors = []
         self.resistorimg = ImageTk.PhotoImage(Image.open("resistor.jpg").resize((50, 50), Image.ANTIALIAS))
@@ -57,7 +58,6 @@ class Simulator(Frame):
         self.powersupplypic.image = self.powersupplyimg
         self.powersupplypic.grid(row = self.height, column = 31, columnspan = 9)
         self.powersupplypic.bind("<Button>", self.powersupply_select)
-        self.powersupply = None
 
         self.switchs = []
         self.switchimg = ImageTk.PhotoImage(Image.open("switch.jpg").resize((50, 50), Image.ANTIALIAS))
@@ -98,8 +98,14 @@ class Simulator(Frame):
 
         root = Tk()
         root.title("New Wire")
-        self.wire = Wire(root, self)
-        self.wire.mainloop()
+        wire = Wire(root, self)
+        wire.mainloop()
+
+    def wire_edit(self, coord):
+        root = Tk()
+        root.title("Edit Wire")
+        wire = WireEdit(root, self.elements[coord], self)
+        wire.mainloop()
 
     def resistor_select(self, event):
         self.reset_highlight()
@@ -115,8 +121,8 @@ class Simulator(Frame):
 
         root = Tk()
         root.title("New Power Supply")
-        self.powersupply = PowerSupply(root, self)
-        self.powersupply.mainloop()
+        powersupply = PowerSupply(root, self)
+        powersupply.mainloop()
 
     def powersupply_edit(self, coord):
         root = Tk()

@@ -33,11 +33,10 @@ class PowerSupply(Frame):
         self.submit = Button(self, bg = "white", text = "Submit", command = self.submit)
         self.submit.grid(row = 6, column = 0, columnspan = 2)
 
-        for supply in self.sim.supplies.keys():
-            if supply == (1, 1):
-                self.topButton["state"] = DISABLED
-            elif supply == (17, 1):
-                self.bottomButton["state"] = DISABLED
+        if self.sim.elements[(1, 1)].color != "khaki1":
+            self.topButton["state"] = DISABLED
+        if self.sim.elements[(17, 1)].color != "khaki1":
+            self.topButton["state"] = DISABLED
 
     def createtop(self):
         self.tb["text"] = "Top"
@@ -52,8 +51,8 @@ class PowerSupply(Frame):
         self.master.destroy()
         self.sim.supplies[self.coord] = self.sim.elements[self.coord]
         self.sim.voltages[self.coord] = voltage
-        self.sim.elements[self.coord]["bg"] = "black"
-        self.sim.elements[self.coord].color = "black"
+        self.sim.elements[self.coord]["bg"] = "tomato"
+        self.sim.elements[self.coord].color = "tomato"
 
 class PowerSupplyEdit(Frame):
     def __init__(self, master, hole, sim):

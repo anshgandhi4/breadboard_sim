@@ -25,7 +25,7 @@ class Breadboard:
                     self.elements[coord].label("")
                 if row in [3, 15] and column % 5 == 0:
                     self.elements[coord].label(str(column))
-            labelList = ("", "+", "-", "", "a", "b", "c", "d", "e", "", "f", "g", "h", "i", "j", "", "-", "+", "")
+            labelList = ("", "+t", "-t", "", "a", "b", "c", "d", "e", "", "f", "g", "h", "i", "j", "", "-b", "+b", "")
             self.elements[(row, 0)].label(labelList[row])
             self.elements[(row, self.length - 1)].label(labelList[row])
 
