@@ -12,6 +12,7 @@ from Python.led import LEDEdit
 from Python.powersupply import PowerSupply
 from Python.powersupply import PowerSupplyEdit
 from Python.switch import Switch
+from Python.switch import SwitchEdit
 
 class Simulator(Frame):
     def __init__(self, master):
@@ -23,9 +24,6 @@ class Simulator(Frame):
         self.grid()
         self.length = 52
         self.height = 19
-
-        self.display = Label(self, bg = "white", font = ("Arial", 48))
-        self.display.grid(row = self.height + 1, column = 0, columnspan = self.length)
 
         self.wirestarts = {}
         self.wireends ={}
@@ -64,7 +62,9 @@ class Simulator(Frame):
         self.powersupplypic.grid(row = self.height, column = 31, columnspan = 9)
         self.powersupplypic.bind("<Button>", self.powersupply_select)
 
-        self.switchs = []
+        self.switched = {}
+        self.switchstarts = {}
+        self.switchends ={}
         self.switchimg = ImageTk.PhotoImage(Image.open("switch.jpg").resize((50, 50), Image.ANTIALIAS))
         self.switchpic = Canvas(self, width = 50, height = 50, highlightthickness = 4)
         self.switchpic.create_image(27, 27, image = self.switchimg)
@@ -88,7 +88,6 @@ class Simulator(Frame):
         self.elements = self.breadboard.elements
         self.groups = self.breadboard.groups
         self.grid_breadboard()
-        self.display["text"] = ""
         self.reset_highlight()
 
     def grid_breadboard(self):
@@ -160,6 +159,17 @@ class Simulator(Frame):
     def switch_select(self, event):
         self.reset_highlight()
         self.switchpic["highlightbackground"] = "gold"
+
+        root = Tk()
+        root.title("New Switch")
+        switch = Switch(root, self)
+        switch.mainloop()
+
+    def switch_edit(self, coord):
+        root = Tk()
+        root.title("Edit Switch")
+        switch = SwitchEdit(root, self.elements[coord], self)
+        switch.mainloop()
 
 # Run Simulator
 root = Tk()

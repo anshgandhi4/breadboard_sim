@@ -7,10 +7,9 @@ class PowerSupply(Frame):
         :param sim: (Simulator) """
 
         Frame.__init__(self, master, bg = "white")
-        self.grid()
-
         self.columnconfigure(0, minsize = 65)
         self.columnconfigure(1, minsize = 65)
+        self.grid()
 
         self.master = master
         self.sim = sim

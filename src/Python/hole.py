@@ -46,8 +46,9 @@ class Hole(Canvas):
             self.master.resistor_edit(self.coord)
         elif self.coord in self.master.ledstarts.keys() or self.coord in self.master.ledends.keys():
             self.master.led_edit(self.coord)
+        elif self.coord in self.master.switchstarts.keys() or self.coord in self.master.switchends.keys():
+            self.master.switch_edit(self.coord)
         else:
-            self.master.display["text"] = self.coord
             for element in self.master.elements:
                 if self.master.elements[element]["bg"] != self.master.elements[element].color:
                     self.master.elements[element]["bg"] = self.master.elements[element].color

@@ -7,10 +7,9 @@ class Wire(Frame):
         :param sim: (Simulator) """
 
         Frame.__init__(self, master, bg = "white")
+        self.columnconfigure(0, minsize = 65)
+        self.columnconfigure(1, minsize = 65)
         self.grid()
-
-        self.columnconfigure(0, minsize = 20)
-        self.columnconfigure(1, minsize = 20)
 
         self.master = master
         self.sim = sim
