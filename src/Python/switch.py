@@ -54,48 +54,57 @@ class Switch(Frame):
     def submit(self):
         labelList = ("", "+t", "-t", "", "a", "b", "c", "d", "e", "", "f", "g", "h", "i", "j", "", "-b", "+b", "")
 
-        try:
-            startrow = labelList.index(self.startrow.get())
-            startcol = int(self.startcol.get())
-            startcoord = (startrow, startcol)
-            endrow = labelList.index(self.endrow.get())
-            endcol = int(self.endcol.get())
-            endcoord = (endrow, endcol)
+        startrow = labelList.index(self.startrow.get())
+        startcol = int(self.startcol.get())
+        startcoord = (startrow, startcol)
+        endrow = labelList.index(self.endrow.get())
+        endcol = int(self.endcol.get())
+        endcoord = (endrow, endcol)
 
-            colorvalid = self.sim.elements[startcoord].color == "khaki1" and self.sim.elements[endcoord].color == "khaki1"
+        on = self.on
+        self.create_switch(on, startcoord, endcoord, self.sim)
+
+    def create_switch(self, on, startcoord, endcoord, sim):
+        startrow = startcoord[0]
+        startcol = startcoord[1]
+        endrow = endcoord[0]
+        endcol = endcoord[1]
+
+        try:
+            colorvalid = sim.elements[startcoord].color == "khaki1" and sim.elements[endcoord].color == "khaki1"
             startcoordvalid = startcoord[0] in [1, 2, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 16, 17] and startcoord[1] in range(1, 51)
             endcoordvalid = endcoord[0] in [1, 2, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 16, 17] and endcoord[1] in range(1, 51)
 
-            if colorvalid and startcoordvalid and endcoordvalid and self.on != None:
+            if colorvalid and startcoordvalid and endcoordvalid and on != None:
                 if startrow == endrow and startcol != endcol:
                     self.master.destroy()
-                    self.sim.switched[startcoord] = self.on
-                    self.sim.switched[endcoord] = self.on
+                    sim.switched[startcoord] = on
+                    sim.switched[endcoord] = on
 
-                    self.sim.switchstarts[startcoord] = self.sim.elements[endcoord]
-                    self.sim.switchends[endcoord] = self.sim.elements[startcoord]
+                    sim.switchstarts[startcoord] = sim.elements[endcoord]
+                    sim.switchends[endcoord] = sim.elements[startcoord]
                     for col in range(min(startcol, endcol), max(startcol, endcol) + 1):
-                        if self.on:
-                            self.sim.elements[(startrow, col)]["bg"] = "green2"
-                            self.sim.elements[(startrow, col)].color = "green2"
+                        if on:
+                            sim.elements[(startrow, col)]["bg"] = "green2"
+                            sim.elements[(startrow, col)].color = "green2"
                         else:
-                            self.sim.elements[(startrow, col)]["bg"] = "red3"
-                            self.sim.elements[(startrow, col)].color = "red3"
+                            sim.elements[(startrow, col)]["bg"] = "red3"
+                            sim.elements[(startrow, col)].color = "red3"
 
                 elif startcol == endcol and startrow != endrow:
                     self.master.destroy()
-                    self.sim.switched[startcoord] = self.on
-                    self.sim.switched[endcoord] = self.on
+                    sim.switched[startcoord] = on
+                    sim.switched[endcoord] = on
 
-                    self.sim.switchstarts[startcoord] = self.sim.elements[endcoord]
-                    self.sim.switchends[endcoord] = self.sim.elements[startcoord]
+                    sim.switchstarts[startcoord] = sim.elements[endcoord]
+                    sim.switchends[endcoord] = sim.elements[startcoord]
                     for row in range(min(startrow, endrow), max(startrow, endrow) + 1):
-                        if self.on:
-                            self.sim.elements[(row, startcol)]["bg"] = "green2"
-                            self.sim.elements[(row, startcol)].color = "green2"
+                        if on:
+                            sim.elements[(row, startcol)]["bg"] = "green2"
+                            sim.elements[(row, startcol)].color = "green2"
                         else:
-                            self.sim.elements[(row, startcol)]["bg"] = "red3"
-                            self.sim.elements[(row, startcol)].color = "red3"
+                            sim.elements[(row, startcol)]["bg"] = "red3"
+                            sim.elements[(row, startcol)].color = "red3"
         except:
             pass
 

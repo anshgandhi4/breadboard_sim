@@ -26,7 +26,8 @@ class Simulator(Frame):
         self.height = 19
 
         self.wirestarts = {}
-        self.wireends ={}
+        self.wireends = {}
+        self.wirecolors = {}
         self.wireimg = ImageTk.PhotoImage(Image.open("wire.jpg").resize((50, 50), Image.ANTIALIAS))
         self.wirepic = Canvas(self, width = 50, height = 50, highlightthickness = 4)
         self.wirepic.create_image(27, 27, image = self.wireimg)
@@ -36,7 +37,7 @@ class Simulator(Frame):
 
         self.resistances = {}
         self.resistorstarts = {}
-        self.resistorends ={}
+        self.resistorends = {}
         self.resistorimg = ImageTk.PhotoImage(Image.open("resistor.jpg").resize((50, 50), Image.ANTIALIAS))
         self.resistorpic = Canvas(self, width = 50, height = 50, highlightthickness = 4)
         self.resistorpic.create_image(27, 27, image = self.resistorimg)
@@ -45,7 +46,8 @@ class Simulator(Frame):
         self.resistorpic.bind("<Button>", self.resistor_select)
 
         self.ledstarts = {}
-        self.ledends ={}
+        self.ledends = {}
+        self.ledcolors = {}
         self.ledimg = ImageTk.PhotoImage(Image.open("led.jpg").resize((50, 50), Image.ANTIALIAS))
         self.ledpic = Canvas(self, width = 50, height = 50, highlightthickness = 4)
         self.ledpic.create_image(27, 27, image = self.ledimg)

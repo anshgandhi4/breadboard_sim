@@ -7,10 +7,9 @@ class LED(Frame):
         :param sim: (Simulator) """
 
         Frame.__init__(self, master, bg = "white")
+        self.columnconfigure(0, minsize = 65)
+        self.columnconfigure(1, minsize = 65)
         self.grid()
-
-        self.columnconfigure(0, minsize = 20)
-        self.columnconfigure(1, minsize = 20)
 
         self.master = master
         self.sim = sim
@@ -41,48 +40,61 @@ class LED(Frame):
     def submit(self):
         labelList = ("", "+t", "-t", "", "a", "b", "c", "d", "e", "", "f", "g", "h", "i", "j", "", "-b", "+b", "")
 
+        startrow = labelList.index(self.startrow.get())
+        startcol = int(self.startcol.get())
+        startcoord = (startrow, startcol)
+        endrow = labelList.index(self.endrow.get())
+        endcol = int(self.endcol.get())
+        endcoord = (endrow, endcol)
+
         color = self.color.get()
+
+        self.create_led(color, startcoord, endcoord, self.sim)
+
+    def create_led(self, color, startcoord, endcoord, sim):
+        startrow = startcoord[0]
+        startcol = startcoord[1]
+        endrow = endcoord[0]
+        endcol = endcoord[1]
+
         if color in ["tomato", "saddle brown", "khaki1", "green2", "red3", "ivory3", "ivory4"]:
             color = "white"
 
         try:
-            startrow = labelList.index(self.startrow.get())
-            startcol = int(self.startcol.get())
-            startcoord = (startrow, startcol)
-            endrow = labelList.index(self.endrow.get())
-            endcol = int(self.endcol.get())
-            endcoord = (endrow, endcol)
-
-            colorvalid = self.sim.elements[startcoord].color == "khaki1" and self.sim.elements[endcoord].color == "khaki1"
+            colorvalid = sim.elements[startcoord].color == "khaki1" and sim.elements[endcoord].color == "khaki1"
             startcoordvalid = startcoord[0] in [1, 2, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 16, 17] and startcoord[1] in range(1, 51)
             endcoordvalid = endcoord[0] in [1, 2, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 16, 17] and endcoord[1] in range(1, 51)
 
             if colorvalid and startcoordvalid and endcoordvalid:
                 if startrow == endrow and startcol != endcol:
                     self.master.destroy()
+                    sim.ledcolors[startcoord] = color
+                    sim.ledcolors[endcoord] = color
 
-                    self.sim.ledstarts[startcoord] = self.sim.elements[endcoord]
-                    self.sim.ledends[endcoord] = self.sim.elements[startcoord]
+                    sim.ledstarts[startcoord] = sim.elements[endcoord]
+                    sim.ledends[endcoord] = sim.elements[startcoord]
                     for col in range(min(startcol, endcol), max(startcol, endcol) + 1):
                         try:
-                            self.sim.elements[(startrow, col)]["bg"] = color
-                            self.sim.elements[(startrow, col)].color = color
+                            sim.elements[(startrow, col)]["bg"] = color
+                            sim.elements[(startrow, col)].color = color
                         except:
-                            self.sim.elements[(startrow, col)]["bg"] = "white"
-                            self.sim.elements[(startrow, col)].color = "white"
+                            sim.elements[(startrow, col)]["bg"] = "white"
+                            sim.elements[(startrow, col)].color = "white"
 
                 elif startcol == endcol and startrow != endrow:
                     self.master.destroy()
+                    sim.ledcolors[startcoord] = color
+                    sim.ledcolors[endcoord] = color
 
-                    self.sim.ledstarts[startcoord] = self.sim.elements[endcoord]
-                    self.sim.ledends[endcoord] = self.sim.elements[startcoord]
+                    sim.ledstarts[startcoord] = sim.elements[endcoord]
+                    sim.ledends[endcoord] = sim.elements[startcoord]
                     for row in range(min(startrow, endrow), max(startrow, endrow) + 1):
                         try:
-                            self.sim.elements[(row, startcol)]["bg"] = color
-                            self.sim.elements[(row, startcol)].color = color
+                            sim.elements[(row, startcol)]["bg"] = color
+                            sim.elements[(row, startcol)].color = color
                         except:
-                            self.sim.elements[(row, startcol)]["bg"] = "white"
-                            self.sim.elements[(row, startcol)].color = "white"
+                            sim.elements[(row, startcol)]["bg"] = "white"
+                            sim.elements[(row, startcol)].color = "white"
         except:
             pass
 
@@ -122,6 +134,8 @@ class LEDEdit(Frame):
 
         if color not in ["tomato", "saddle brown", "khaki1", "green2", "red3", "ivory3", "ivory4"]:
             self.master.destroy()
+            self.sim.ledcolors[self.coord] = color
+            self.sim.ledcolors[endcoord] = color
             if self.coord[0] == endcoord[0]:
                 for col in range(min(self.coord[1], endcoord[1]), max(self.coord[1], endcoord[1]) + 1):
                     try:
@@ -155,6 +169,9 @@ class LEDEdit(Frame):
             for row in range(min(self.coord[0], endcoord[0]), max(self.coord[0], endcoord[0]) + 1):
                 self.sim.elements[(row, self.coord[1])]["bg"] = "khaki1"
                 self.sim.elements[(row, self.coord[1])].color = "khaki1"
+
+        del self.sim.ledcolors[self.coord]
+        del self.sim.ledcolors[endcoord]
 
         try:
             del self.sim.ledstarts[endcoord]

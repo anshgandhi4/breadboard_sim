@@ -53,10 +53,13 @@ class PowerSupply(Frame):
             pass
 
         self.master.destroy()
-        self.sim.supplies[self.coord] = self.sim.elements[self.coord]
-        self.sim.voltages[self.coord] = voltage
-        self.sim.elements[self.coord]["bg"] = "tomato"
-        self.sim.elements[self.coord].color = "tomato"
+        self.create_powersupply(voltage, self.coord, self.sim)
+
+    def create_powersupply(self, voltage, coord, sim):
+        sim.supplies[coord] = sim.elements[coord]
+        sim.voltages[coord] = voltage
+        sim.elements[coord]["bg"] = "tomato"
+        sim.elements[coord].color = "tomato"
 
 class PowerSupplyEdit(Frame):
     def __init__(self, master, hole, sim):
