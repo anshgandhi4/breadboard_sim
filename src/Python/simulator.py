@@ -222,7 +222,6 @@ class Simulator(Frame):
         root = Toplevel()
         root.title("Introduction")
         root.geometry("1000x700")
-        root.configure(bg='white')
         intro = Intro(root)
         intro.mainloop()
 

@@ -28,7 +28,7 @@ class MenuBar:
 
         helpmenu = Menu(self.menubar, tearoff = 0)
         helpmenu.add_command(label = "About", command = self.about)
-        #helpmenu.add_command(label = "Introduction", command = self.intropane())
+        helpmenu.add_command(label = "Introduction", command = self.intropane)
         self.menubar.add_cascade(label = "Help", menu = helpmenu)
 
     def clear_file(self):
