@@ -44,9 +44,7 @@ class MenuBar:
             breadboardFile.close()
             rowList = ast.literal_eval(rowList[0])
 
-            data = [rowList[0 : 2], rowList[2 : 4], rowList[4 : 6], rowList[6 : 8], rowList[8 : 10]]
-            info = self.process_data(data)
-            rawData = self.analyze_data(info, data)
+            rawData = self.data_to_action(rowList)
 
             for wire in rawData[0]:
                 self.sim.create_wire(wire[0], wire[1], wire[2])
@@ -71,7 +69,8 @@ class MenuBar:
         self.sim.launchIntro()
 
     def simulation(self):
-        print("under development")
+        savelist = self.sim.save()
+        rawData = self.data_to_action(savelist)
 
     def about(self):
         messagebox.showinfo("Breadboard Simulator", "This simulator was made by Ansh Gandhi and Jonathan Ma.", parent = self.master)
@@ -160,3 +159,8 @@ class MenuBar:
                 coord1index += 1
                 coord2index = 0
         return rawData
+
+    def data_to_action(self, dataList):
+        data = [dataList[0 : 2], dataList[2 : 4], dataList[4 : 6], dataList[6 : 8], dataList[8 : 10]]
+        info = self.process_data(data)
+        return self.analyze_data(info, data)
