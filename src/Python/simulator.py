@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import Image
 from PIL import ImageTk
+from Python.intro import Intro
 from Python.menubar import MenuBar
 from Python.breadboard import Breadboard
 from Python.wire import Wire
@@ -178,6 +179,14 @@ class Simulator(Frame):
         switch = SwitchEdit(root, self.elements[coord], self)
         switch.mainloop()
 
+    def launchIntro(self):
+        root = Toplevel()
+        root.title("Introduction")
+        root.geometry("1000x700")
+        root.configure(bg='white')
+        intro = Intro(root)
+        intro.mainloop()
+
 # Run Simulator
 root = Tk()
 root.title("Breadboard Simulator")
@@ -185,4 +194,5 @@ sim = Simulator(root)
 menu = Menu(root)
 menubar = MenuBar(root, menu, sim)
 root.config(menu = menu)
+root.after(5000, sim.launchIntro())
 sim.mainloop()
