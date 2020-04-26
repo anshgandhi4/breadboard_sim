@@ -221,7 +221,7 @@ class Simulator(Frame):
     def launchIntro(self):
         root = Toplevel()
         root.title("Introduction")
-        root.geometry("1000x700")
+        root.geometry("1100x675")
         intro = Intro(root)
         intro.mainloop()
 
@@ -232,4 +232,5 @@ sim = Simulator(root)
 menu = Menu(root)
 menubar = MenuBar(root, menu, sim)
 root.config(menu = menu)
+root.after(2000, sim.launchIntro())
 sim.mainloop()
