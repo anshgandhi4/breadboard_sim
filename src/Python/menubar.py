@@ -3,7 +3,6 @@ from tkinter import messagebox
 from tkinter import filedialog
 from Python.breadboard import Breadboard
 import ast
-from collections import defaultdict
 
 class MenuBar:
     def __init__(self, master, menubar, sim):
@@ -16,11 +15,6 @@ class MenuBar:
         self.master = master
         self.menubar = menubar
         self.sim = sim
-
-        self.graph = defaultdict(list)
-        self.bfswid = []
-        self.pairs = []
-        self.traversedList = []
 
         filemenu = Menu(self.menubar, tearoff = 0)
         filemenu.add_command(label = "New", command = self.clear_file)
@@ -80,117 +74,7 @@ class MenuBar:
         self.sim.launchIntro()
 
     def simulation(self):
-        savelist = self.sim.save()
-        rawData = self.data_to_action(savelist)
-
-        # messagebox.showinfo("Simulation", "Simulation Running", parent = self.master)
-        # ledData = []
-        # allleds = []
-        # for led in rawData[2]:
-        #     ledData.append([-1, -1, -1, -1])
-        #     allleds.append(led[0])
-        #     allleds.append(led[1])
-        # if len(rawData[2]) != 0: # ps must be there too
-        #     starttime = time.perf_counter()
-        #     busgroups = []
-        #     for ps in rawData[3]:
-        #         busgroups.append(ps[0][0])
-        #         busgroups.append(ps[1][0])
-        #     busgroups = list(set(busgroups))
-        #     enabledGroups = busgroups.copy()
-        #     for bus in busgroups:
-        #         for hole in bus.holes:
-        #             if hole.coord in rawData[0]: # if component FIX
-        #                 if hole.coord in allleds:
-        #                     ledindex = allleds.index(hole.coord)
-        #
-        #     # for every unit in power supply group
-        #     # if there is a component, go to the other end
-        #     # for every unit in the end
-        #     # if the unit is led, then set ledvar to true
-        #     # if the group was not enabled, enable it and continue recursion
-        #     # repeat
-        #     # repeat same thing for other end of power supply
-        #     # repeat everything for the other power supply
-        #     # if both globals are true then light led and exit
-        #     # if timer is more than 20 seconds, exit
-        #
-        # time.sleep(2)
-        # messagebox.showinfo("Simulation", "Simulation Complete", parent = self.master)
-
-        components = []
-        pses = []
-        groups = []
-        for widget in range(0, len(rawData)):
-            if widget != 3:
-                for component in rawData[widget]:
-                    start = component[0]
-                    end = component[1]
-                    components.append(start)
-                    components.append(end)
-                    groups.append(self.sim.elements[start].group)
-                    groups.append(self.sim.elements[end].group)
-                    startnum = start[0] * 50 + start[1]
-                    endnum = end[0] * 50 + end[1]
-                    self.add(startnum, endnum)
-                    self.add(endnum, startnum)
-            if widget == 3:
-                for component in rawData[widget]:
-                    ps = component[0]
-                    psnum = ps[0] * 50 + ps[1]
-                    components.append(ps)
-                    pses.append(psnum)
-                    self.add(psnum, psnum)
-                    groups.append(self.sim.elements[ps].group)
-        print(components)
-        print(pses)
-        print(groups)
-
-        for pair in self.pairs:
-            p1 = pair[0]
-            p2 = pair[1]
-            if p1 != p2:
-                self.graph[self.bfswid.index(p1)].append(self.bfswid.index(p2))
-            else:
-                row = int(p1 / 50)
-                col = p1 % 50
-                if col == 0:
-                    col = 50
-                coord = (row, col)
-                group = self.sim.elements[coord].group
-                holes = []
-                for hole in group.holes:
-                    if hole.coord in components:
-                        holenum = hole.coord[0] * 50 + hole.coord[1]
-                        holes.append(self.bfswid.index(holenum))
-                for hole in range(1, len(holes)):
-                    self.graph[holes[0]].append(holes[hole])
-                    self.graph[holes[hole]].append(holes[0])
-        print(self.pairs)
-        print(self.bfswid)
-        print(self.graph)
-        # self.bfs(pses[0][0] * 50 + pses[0][1])
-        # print(self.traversedList)
-
-    def add(self, u, v):
-        if u not in self.bfswid:
-            self.bfswid.append(u)
-        if v not in self.bfswid:
-            self.bfswid.append(v)
-        self.pairs.append((u, v))
-
-    def bfs(self, s):
-        visited = [False] * len(self.graph)
-        queue = []
-        queue.append(s)
-        visited[s] = True
-        while queue:
-            s = queue.pop(0)
-            self.traversedList.append(s)
-
-            for i in self.graph[s]:
-                if visited[i] == False:
-                    visited[i] = True
+        messagebox.showinfo("Simulation", "Nice Circuit!", parent = self.master)
 
     def about(self):
         messagebox.showinfo("Breadboard Simulator", "This simulator was made by Ansh Gandhi and Jonathan Ma.", parent = self.master)
