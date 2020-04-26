@@ -52,14 +52,24 @@ class PowerSupply(Frame):
         except:
             pass
 
-        self.master.destroy()
         self.create_powersupply(voltage, self.coord, self.sim)
+        self.master.destroy()
 
-    def create_powersupply(self, voltage, coord, sim):
-        sim.supplies[coord] = sim.elements[coord]
-        sim.voltages[coord] = voltage
-        sim.elements[coord]["bg"] = "tomato"
-        sim.elements[coord].color = "tomato"
+    @staticmethod
+    def create_powersupply(voltage, coord, sim):
+        groundCoord = None
+        if coord == (1, 1):
+            groundCoord = (2, 1)
+        elif coord == (17, 1):
+            groundCoord = (16, 1)
+
+        if coord == (1, 1) or coord == (17, 1):
+            sim.supplies[coord] = groundCoord
+            sim.voltages[coord] = voltage
+            sim.elements[coord]["bg"] = "tomato"
+            sim.elements[coord].color = "tomato"
+            sim.elements[groundCoord]["bg"] = "black"
+            sim.elements[groundCoord].color = "black"
 
 class PowerSupplyEdit(Frame):
     def __init__(self, master, hole, sim):
@@ -76,11 +86,17 @@ class PowerSupplyEdit(Frame):
         self.coord = self.hole.coord
         self.sim = sim
 
+        coord = self.coord
+        if coord == (2, 1):
+            coord = (1, 1)
+        elif coord == (16, 1):
+            coord = (17, 1)
+
         self.voltageText = Label(self, bg = "white", font = ("Arial", 14), text = "Voltage (V)")
         self.voltageText.grid(row = 0, column = 0)
         self.currentText = Label(self, bg = "white", font = ("Arial", 12))
         self.currentText.grid(row = 1, column = 0)
-        self.currentText["text"] = "Current Value: " + str(self.sim.voltages[self.coord])
+        self.currentText["text"] = "Current Value: " + str(self.sim.voltages[coord])
         self.voltage = Entry(self)
         self.voltage.grid(row = 2, column = 0)
 
@@ -97,12 +113,38 @@ class PowerSupplyEdit(Frame):
         except:
             pass
 
+        groundCoord = None
+        if self.coord == (1, 1):
+            groundCoord = (2, 1)
+        elif self.coord == (17, 1):
+            groundCoord = (16, 1)
+        elif self.coord == (2, 1):
+            self.coord = (1, 1)
+            groundCoord = (2, 1)
+        elif self.coord == (16, 1):
+            self.coord = (17, 1)
+            groundCoord = (16, 1)
+
         self.master.destroy()
         self.sim.voltages[self.coord] = voltage
 
     def delete(self):
+        groundCoord = None
+        if self.coord == (1, 1):
+            groundCoord = (2, 1)
+        elif self.coord == (17, 1):
+            groundCoord = (16, 1)
+        elif self.coord == (2, 1):
+            self.coord = (1, 1)
+            groundCoord = (2, 1)
+        elif self.coord == (16, 1):
+            self.coord = (17, 1)
+            groundCoord = (16, 1)
+
         self.master.destroy()
         del self.sim.supplies[self.coord]
         del self.sim.voltages[self.coord]
-        self.hole["bg"] = "khaki1"
-        self.hole.color = "khaki1"
+        self.sim.elements[self.coord]["bg"] = "khaki1"
+        self.sim.elements[self.coord].color = "khaki1"
+        self.sim.elements[groundCoord]["bg"] = "khaki1"
+        self.sim.elements[groundCoord].color = "khaki1"

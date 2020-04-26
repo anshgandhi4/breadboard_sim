@@ -53,43 +53,50 @@ class Resistor(Frame):
         except:
             pass
 
-        self.create_resistor(resistance, startcoord, endcoord, self.sim)
+        taskSuccessful = self.create_resistor(resistance, startcoord, endcoord, self.sim)
+        if taskSuccessful:
+            self.master.destroy()
 
-    def create_resistor(self, resistance, startcoord, endcoord, sim):
+    @staticmethod
+    def create_resistor(resistance, startcoord, endcoord, sim):
         startrow = startcoord[0]
         startcol = startcoord[1]
         endrow = endcoord[0]
         endcol = endcoord[1]
 
+        taskSuccessful = False
+
         try:
-            colorvalid = sim.elements[startcoord].color == "khaki1" and self.sim.elements[endcoord].color == "khaki1"
+            colorvalid = sim.elements[startcoord].color == "khaki1" and sim.elements[endcoord].color == "khaki1"
             startcoordvalid = startcoord[0] in [1, 2, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 16, 17] and startcoord[1] in range(1, 51)
             endcoordvalid = endcoord[0] in [1, 2, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 16, 17] and endcoord[1] in range(1, 51)
 
             if colorvalid and startcoordvalid and endcoordvalid:
                 if startrow == endrow and startcol != endcol:
-                    self.master.destroy()
+                    taskSuccessful = True
                     sim.resistances[startcoord] = resistance
                     sim.resistances[endcoord] = resistance
 
-                    sim.resistorstarts[startcoord] = sim.elements[endcoord]
-                    sim.resistorends[endcoord] = sim.elements[startcoord]
+                    sim.resistorstarts[startcoord] = endcoord
+                    sim.resistorends[endcoord] = startcoord
                     for col in range(min(startcol, endcol), max(startcol, endcol) + 1):
                         sim.elements[(startrow, col)]["bg"] = "saddle brown"
                         sim.elements[(startrow, col)].color = "saddle brown"
 
                 elif startcol == endcol and startrow != endrow:
-                    self.master.destroy()
+                    taskSuccessful = True
                     sim.resistances[startcoord] = resistance
                     sim.resistances[endcoord] = resistance
 
-                    sim.resistorstarts[startcoord] = sim.elements[endcoord]
-                    sim.resistorends[endcoord] = sim.elements[startcoord]
+                    sim.resistorstarts[startcoord] = endcoord
+                    sim.resistorends[endcoord] = startcoord
                     for row in range(min(startrow, endrow), max(startrow, endrow) + 1):
                         sim.elements[(row, startcol)]["bg"] = "saddle brown"
                         sim.elements[(row, startcol)].color = "saddle brown"
         except:
             pass
+
+        return taskSuccessful
 
 class ResistorEdit(Frame):
     def __init__(self, master, hole, sim):
@@ -129,9 +136,9 @@ class ResistorEdit(Frame):
 
         endcoord = None
         try:
-            endcoord = self.sim.resistorends[self.coord].coord
+            endcoord = self.sim.resistorends[self.coord]
         except:
-            endcoord = self.sim.resistorstarts[self.coord].coord
+            endcoord = self.sim.resistorstarts[self.coord]
 
         self.master.destroy()
         self.sim.resistances[self.coord] = resistance
@@ -140,9 +147,9 @@ class ResistorEdit(Frame):
     def delete(self):
         endcoord = None
         try:
-            endcoord = self.sim.resistorends[self.coord].coord
+            endcoord = self.sim.resistorends[self.coord]
         except:
-            endcoord = self.sim.resistorstarts[self.coord].coord
+            endcoord = self.sim.resistorstarts[self.coord]
 
         self.master.destroy()
         if self.coord[0] == endcoord[0]:

@@ -35,7 +35,7 @@ class Simulator(Frame):
         self.wirepic.image = self.wireimg
         self.wirepic.grid(row = self.height, column = 1, columnspan = 9)
         self.wirepic.bind("<Button>", self.wire_select)
-        Label(self, bg = "white", font = ("Arial", 20), text = "Wire").grid(row = 27, column = 1, columnspan = 9)
+        Label(self, bg = "white", font = ("Arial", 20), text = "Wire").grid(row = self.height + 1, column = 1, columnspan = 9)
 
         self.resistances = {}
         self.resistorstarts = {}
@@ -46,7 +46,7 @@ class Simulator(Frame):
         self.resistorpic.image = self.resistorimg
         self.resistorpic.grid(row = self.height, column = 11, columnspan = 9)
         self.resistorpic.bind("<Button>", self.resistor_select)
-        Label(self, bg = "white", font = ("Arial", 20), text = "Resistor").grid(row = 27, column = 11, columnspan = 9)
+        Label(self, bg = "white", font = ("Arial", 20), text = "Resistor").grid(row = self.height + 1, column = 11, columnspan = 9)
 
         self.ledstarts = {}
         self.ledends = {}
@@ -57,7 +57,7 @@ class Simulator(Frame):
         self.ledpic.image = self.ledimg
         self.ledpic.grid(row = self.height, column = 21, columnspan = 9)
         self.ledpic.bind("<Button>", self.led_select)
-        Label(self, bg = "white", font = ("Arial", 20), text = "LED").grid(row = 27, column = 21, columnspan = 9)
+        Label(self, bg = "white", font = ("Arial", 20), text = "LED").grid(row = self.height + 1, column = 21, columnspan = 9)
 
         self.supplies = {}
         self.voltages = {}
@@ -67,7 +67,7 @@ class Simulator(Frame):
         self.powersupplypic.image = self.powersupplyimg
         self.powersupplypic.grid(row = self.height, column = 31, columnspan = 9)
         self.powersupplypic.bind("<Button>", self.powersupply_select)
-        Label(self, bg = "white", font = ("Arial", 20), text = "Power Supply").grid(row = 27, column = 31, columnspan = 9)
+        Label(self, bg = "white", font = ("Arial", 20), text = "Power Supply").grid(row = self.height + 1, column = 31, columnspan = 9)
 
         self.switched = {}
         self.switchstarts = {}
@@ -78,7 +78,7 @@ class Simulator(Frame):
         self.switchpic.image = self.switchimg
         self.switchpic.grid(row = self.height, column = 41, columnspan = 9)
         self.switchpic.bind("<Button>", self.switch_select)
-        Label(self, bg = "white", font = ("Arial", 20), text = "Switch").grid(row = 27, column = 41, columnspan = 9)
+        Label(self, bg = "white", font = ("Arial", 20), text = "Switch").grid(row = self.height + 1, column = 41, columnspan = 9)
 
         self.elements = {}
         self.groups = {}
@@ -103,6 +103,45 @@ class Simulator(Frame):
             for column in range(0, self.length):
                 coord = (row, column)
                 self.elements[coord].grid(row = row, column = column)
+
+    def save(self):
+        savelist = []
+
+        wires = {**self.wirestarts, **self.wireends}
+        savelist.append(wires)
+        savelist.append(self.wirecolors)
+
+        resistors = {**self.resistorstarts, **self.resistorends}
+        savelist.append(resistors)
+        savelist.append(self.resistances)
+
+        leds = {**self.ledstarts, **self.ledends}
+        savelist.append(leds)
+        savelist.append(self.ledcolors)
+
+        savelist.append(self.supplies)
+        savelist.append(self.voltages)
+
+        switches = {**self.switchstarts, **self.switchends}
+        savelist.append(switches)
+        savelist.append(self.switched)
+
+        return savelist
+
+    def create_wire(self, start, end, color):
+        Wire.create_wire(color, start, end, self)
+
+    def create_resistor(self, start, end, resistance):
+        Resistor.create_resistor(resistance, start, end, self)
+
+    def create_led(self, start, end, color):
+        LED.create_led(color, start, end, self)
+
+    def create_powersupply(self, coord, voltage):
+        PowerSupply.create_powersupply(voltage, coord, self)
+
+    def create_switch(self, start, end, on):
+        Switch.create_switch(on, start, end, self)
 
     def wire_select(self, event):
         self.reset_highlight()

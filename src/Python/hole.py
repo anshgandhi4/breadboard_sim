@@ -40,6 +40,10 @@ class Hole(Canvas):
                     self.master.elements[element]["bg"] = self.master.elements[element].color
         elif self.coord in self.master.supplies.keys():
             self.master.powersupply_edit(self.coord)
+        elif self.coord == (2, 1) and (1, 1) in self.master.supplies.keys():
+            self.master.powersupply_edit(self.coord)
+        elif self.coord == (16, 1) and (17, 1) in self.master.supplies.keys():
+            self.master.powersupply_edit(self.coord)
         elif self.coord in self.master.wirestarts.keys() or self.coord in self.master.wireends.keys():
             self.master.wire_edit(self.coord)
         elif self.coord in self.master.resistorstarts.keys() or self.coord in self.master.resistorends.keys():
