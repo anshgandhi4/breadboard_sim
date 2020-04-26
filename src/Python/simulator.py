@@ -34,6 +34,7 @@ class Simulator(Frame):
         self.wirepic.image = self.wireimg
         self.wirepic.grid(row = self.height, column = 1, columnspan = 9)
         self.wirepic.bind("<Button>", self.wire_select)
+        Label(self, bg = "white", font = ("Arial", 20), text = "Wire").grid(row = 27, column = 1, columnspan = 9)
 
         self.resistances = {}
         self.resistorstarts = {}
@@ -44,6 +45,7 @@ class Simulator(Frame):
         self.resistorpic.image = self.resistorimg
         self.resistorpic.grid(row = self.height, column = 11, columnspan = 9)
         self.resistorpic.bind("<Button>", self.resistor_select)
+        Label(self, bg = "white", font = ("Arial", 20), text = "Resistor").grid(row = 27, column = 11, columnspan = 9)
 
         self.ledstarts = {}
         self.ledends = {}
@@ -54,6 +56,7 @@ class Simulator(Frame):
         self.ledpic.image = self.ledimg
         self.ledpic.grid(row = self.height, column = 21, columnspan = 9)
         self.ledpic.bind("<Button>", self.led_select)
+        Label(self, bg = "white", font = ("Arial", 20), text = "LED").grid(row = 27, column = 21, columnspan = 9)
 
         self.supplies = {}
         self.voltages = {}
@@ -63,6 +66,7 @@ class Simulator(Frame):
         self.powersupplypic.image = self.powersupplyimg
         self.powersupplypic.grid(row = self.height, column = 31, columnspan = 9)
         self.powersupplypic.bind("<Button>", self.powersupply_select)
+        Label(self, bg = "white", font = ("Arial", 20), text = "Power Supply").grid(row = 27, column = 31, columnspan = 9)
 
         self.switched = {}
         self.switchstarts = {}
@@ -73,6 +77,7 @@ class Simulator(Frame):
         self.switchpic.image = self.switchimg
         self.switchpic.grid(row = self.height, column = 41, columnspan = 9)
         self.switchpic.bind("<Button>", self.switch_select)
+        Label(self, bg = "white", font = ("Arial", 20), text = "Switch").grid(row = 27, column = 41, columnspan = 9)
 
         self.elements = {}
         self.groups = {}
