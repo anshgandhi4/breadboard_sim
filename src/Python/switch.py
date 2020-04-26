@@ -62,13 +62,18 @@ class Switch(Frame):
         endcoord = (endrow, endcol)
 
         on = self.on
-        self.create_switch(on, startcoord, endcoord, self.sim)
+        taskSuccessful = self.create_switch(on, startcoord, endcoord, self.sim)
+        if taskSuccessful:
+            self.master.destroy()
 
-    def create_switch(self, on, startcoord, endcoord, sim):
+    @staticmethod
+    def create_switch(on, startcoord, endcoord, sim):
         startrow = startcoord[0]
         startcol = startcoord[1]
         endrow = endcoord[0]
         endcol = endcoord[1]
+
+        taskSuccessful = False
 
         try:
             colorvalid = sim.elements[startcoord].color == "khaki1" and sim.elements[endcoord].color == "khaki1"
@@ -77,12 +82,12 @@ class Switch(Frame):
 
             if colorvalid and startcoordvalid and endcoordvalid and on != None:
                 if startrow == endrow and startcol != endcol:
-                    self.master.destroy()
+                    taskSuccessful = True
                     sim.switched[startcoord] = on
                     sim.switched[endcoord] = on
 
-                    sim.switchstarts[startcoord] = sim.elements[endcoord]
-                    sim.switchends[endcoord] = sim.elements[startcoord]
+                    sim.switchstarts[startcoord] = endcoord
+                    sim.switchends[endcoord] = startcoord
                     for col in range(min(startcol, endcol), max(startcol, endcol) + 1):
                         if on:
                             sim.elements[(startrow, col)]["bg"] = "green2"
@@ -92,12 +97,12 @@ class Switch(Frame):
                             sim.elements[(startrow, col)].color = "red3"
 
                 elif startcol == endcol and startrow != endrow:
-                    self.master.destroy()
+                    taskSuccessful = True
                     sim.switched[startcoord] = on
                     sim.switched[endcoord] = on
 
-                    sim.switchstarts[startcoord] = sim.elements[endcoord]
-                    sim.switchends[endcoord] = sim.elements[startcoord]
+                    sim.switchstarts[startcoord] = endcoord
+                    sim.switchends[endcoord] = startcoord
                     for row in range(min(startrow, endrow), max(startrow, endrow) + 1):
                         if on:
                             sim.elements[(row, startcol)]["bg"] = "green2"
@@ -107,6 +112,8 @@ class Switch(Frame):
                             sim.elements[(row, startcol)].color = "red3"
         except:
             pass
+
+        return taskSuccessful
 
 class SwitchEdit(Frame):
     def __init__(self, master, hole, sim):
@@ -151,9 +158,9 @@ class SwitchEdit(Frame):
     def update(self):
         endcoord = None
         try:
-            endcoord = self.sim.switchends[self.coord].coord
+            endcoord = self.sim.switchends[self.coord]
         except:
-            endcoord = self.sim.switchstarts[self.coord].coord
+            endcoord = self.sim.switchstarts[self.coord]
 
         self.master.destroy()
         self.sim.switched[self.coord] = self.on
@@ -179,9 +186,9 @@ class SwitchEdit(Frame):
     def delete(self):
         endcoord = None
         try:
-            endcoord = self.sim.switchends[self.coord].coord
+            endcoord = self.sim.switchends[self.coord]
         except:
-            endcoord = self.sim.switchstarts[self.coord].coord
+            endcoord = self.sim.switchstarts[self.coord]
 
         self.master.destroy()
         if self.coord[0] == endcoord[0]:

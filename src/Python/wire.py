@@ -49,9 +49,12 @@ class Wire(Frame):
 
         color = self.color.get()
 
-        self.create_wire(color, startcoord, endcoord, self.sim)
+        taskSuccessful = self.create_wire(color, startcoord, endcoord, self.sim)
+        if taskSuccessful:
+            self.master.destroy()
 
-    def create_wire(self, color, startcoord, endcoord, sim):
+    @staticmethod
+    def create_wire(color, startcoord, endcoord, sim):
         startrow = startcoord[0]
         startcol = startcoord[1]
         endrow = endcoord[0]
@@ -60,6 +63,8 @@ class Wire(Frame):
         if color in ["tomato", "saddle brown", "khaki1", "green2", "red3", "ivory3", "ivory4"]:
             color = "sky blue"
 
+        taskSuccessful = False
+
         try:
             colorvalid = sim.elements[startcoord].color == "khaki1" and sim.elements[endcoord].color == "khaki1"
             startcoordvalid = startcoord[0] in [1, 2, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 16, 17] and startcoord[1] in range(1, 51)
@@ -67,12 +72,12 @@ class Wire(Frame):
 
             if colorvalid and startcoordvalid and endcoordvalid:
                 if startrow == endrow and startcol != endcol:
-                    self.master.destroy()
+                    taskSuccessful = True
                     sim.wirecolors[startcoord] = color
                     sim.wirecolors[endcoord] = color
 
-                    sim.wirestarts[startcoord] = sim.elements[endcoord]
-                    sim.wireends[endcoord] = sim.elements[startcoord]
+                    sim.wirestarts[startcoord] = endcoord
+                    sim.wireends[endcoord] = startcoord
                     for col in range(min(startcol, endcol), max(startcol, endcol) + 1):
                         try:
                             sim.elements[(startrow, col)]["bg"] = color
@@ -82,12 +87,12 @@ class Wire(Frame):
                             sim.elements[(startrow, col)].color = "sky blue"
 
                 elif startcol == endcol and startrow != endrow:
-                    self.master.destroy()
+                    taskSuccessful = True
                     sim.wirecolors[startcoord] = color
                     sim.wirecolors[endcoord] = color
 
-                    sim.wirestarts[startcoord] = sim.elements[endcoord]
-                    sim.wireends[endcoord] = sim.elements[startcoord]
+                    sim.wirestarts[startcoord] = endcoord
+                    sim.wireends[endcoord] = startcoord
                     for row in range(min(startrow, endrow), max(startrow, endrow) + 1):
                         try:
                             sim.elements[(row, startcol)]["bg"] = color
@@ -97,6 +102,8 @@ class Wire(Frame):
                             sim.elements[(row, startcol)].color = "sky blue"
         except:
             pass
+
+        return taskSuccessful
 
 class WireEdit(Frame):
     def __init__(self, master, hole, sim):
@@ -128,9 +135,9 @@ class WireEdit(Frame):
 
         endcoord = None
         try:
-            endcoord = self.sim.wireends[self.coord].coord
+            endcoord = self.sim.wireends[self.coord]
         except:
-            endcoord = self.sim.wirestarts[self.coord].coord
+            endcoord = self.sim.wirestarts[self.coord]
 
         if color not in ["tomato", "saddle brown", "khaki1", "green2", "red3", "ivory3", "ivory4"]:
             self.master.destroy()
@@ -156,9 +163,9 @@ class WireEdit(Frame):
     def delete(self):
         endcoord = None
         try:
-            endcoord = self.sim.wireends[self.coord].coord
+            endcoord = self.sim.wireends[self.coord]
         except:
-            endcoord = self.sim.wirestarts[self.coord].coord
+            endcoord = self.sim.wirestarts[self.coord]
 
         self.master.destroy()
         if self.coord[0] == endcoord[0]:
